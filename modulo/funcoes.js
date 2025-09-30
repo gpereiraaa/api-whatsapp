@@ -25,17 +25,17 @@ const getAllUsers = function () {
 
 // Função que lista os dados de um usuário especifico 
 const getDataUser = function (numero) {
-    let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: [] }
+    let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: {} }
     dados.contatos['whats-users'].forEach(function (informacoes) {
-        if (informacoes.number === numero) {
+        if (Number(informacoes.number) === Number(numero)) {
             message.user.id = informacoes.id,
-                message.user.nome = informacoes.account,
-                message.user.apelido = informacoes.nickname,
-                message.user.numero = informacoes.number,
-                message.user.imagem = informacoes['profile-image'],
-                message.user.cor_de_fundo = informacoes.background,
-                message.user.data_criacao_conta = informacoes['created-since'].start,
-                message.user.data_encerramento_conta = informacoes['created-since'].end
+            message.user.nome = informacoes.account,
+            message.user.apelido = informacoes.nickname,
+            message.user.numero = informacoes.number,
+            message.user.imagem = informacoes['profile-image'],
+            message.user.cor_de_fundo = informacoes.background,
+            message.user.data_criacao_conta = informacoes['created-since'].start,
+            message.user.data_encerramento_conta = informacoes['created-since'].end
         }
     })
 
@@ -50,7 +50,7 @@ const getDataContactUser = function (numero) {
     let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', contatos: [] }
 
     dados.contatos['whats-users'].forEach(function (informacoes) {
-        if (informacoes.number === numero) {
+        if (Number(informacoes.number) === Number(numero)) {
             informacoes.contacts.forEach(contatos => {
                 let contato = {
                     'nome': contatos.name,
@@ -73,7 +73,7 @@ const getDataContactUser = function (numero) {
 const getAllMessagesUser = function (numero) {
     let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: '', mensagens: [] }
     dados.contatos['whats-users'].forEach(function (informacoes) {
-        if (informacoes.number === numero) {
+        if (Number(informacoes.number) === Number(numero)) {
             message.user = informacoes.account
             informacoes.contacts.forEach(contatos => {
                 contatos.messages.forEach(mensagens => {
@@ -98,10 +98,10 @@ const getAllMessagesUser = function (numero) {
 const getConversationUserContact = function (numberUser, numberContact) {
     let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: '', contato: '', mensagens: [] }
     dados.contatos['whats-users'].forEach(function (informacoes) {
-        if (informacoes.number === numberUser) {
+        if (Number(informacoes.number) === Number(numberUser)) {
             message.user = informacoes.account
             informacoes.contacts.forEach(contatos => {
-                if (contatos.number === numberContact) {
+                if (Number(contatos.number) === Number(numberContact)) {
                     message.contato = contatos.name
                     contatos.messages.forEach(mensagens => {
                         let mensagem = {
@@ -126,12 +126,13 @@ const getConversationUserContact = function (numberUser, numberContact) {
 const getKeywordSearchFilter = function (numberUser, numberContact, keyword) {
     let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: '', contato: '', palavra_chave: '', mensagens: [] }
     dados.contatos['whats-users'].forEach(function (informacoes) {
-        if (informacoes.number === numberUser) {
+        if (Number(informacoes.number) === Number(numberUser)) {
             message.user = informacoes.account
             informacoes.contacts.forEach(contatos => {
-                if (contatos.number === numberContact) {
+                if (Number(contatos.number) === Number(numberContact)) {
                     message.contato = contatos.name
                     contatos.messages.forEach(mensagens => {
+                        message.palavra_chave = keyword
                         if (mensagens.content.toLowerCase().includes(keyword.toLowerCase())) {
                             let mensagem = {
                                 'de': mensagens.sender,
