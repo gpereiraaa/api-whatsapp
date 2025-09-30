@@ -88,7 +88,10 @@ const getAllMessagesUser = function (numero) {
             })
         }
     })
-    return message
+    if (message.mensagens.length > 0)
+        return message
+    else
+        return MESSAGE_ERROR
 }
 
 // Função que lista uma conversa de um usuario e um contato
@@ -98,7 +101,7 @@ const getConversationUserContact = function (numberUser, numberContact) {
         if (informacoes.number === numberUser) {
             message.user = informacoes.account
             informacoes.contacts.forEach(contatos => {
-                if(contatos.number === numberContact){
+                if (contatos.number === numberContact) {
                     message.contato = contatos.name
                     contatos.messages.forEach(mensagens => {
                         let mensagem = {
@@ -113,17 +116,47 @@ const getConversationUserContact = function (numberUser, numberContact) {
             })
         }
     })
-    return message
+    if (message.mensagens.length > 0)
+        return message
+    else
+        return MESSAGE_ERROR
 }
 
+// Função que realiza um filtro em uma conversa por uma determinda palavra chave 
+const getKeywordSearchFilter = function (numberUser, numberContact, keyword) {
+    let message = { status: true, statuscode: 200, development: 'Gustavo Pereira', user: '', contato: '', palavra_chave: '', mensagens: [] }
+    dados.contatos['whats-users'].forEach(function (informacoes) {
+        if (informacoes.number === numberUser) {
+            message.user = informacoes.account
+            informacoes.contacts.forEach(contatos => {
+                if (contatos.number === numberContact) {
+                    message.contato = contatos.name
+                    contatos.messages.forEach(mensagens => {
+                        if (mensagens.content.toLowerCase().includes(keyword.toLowerCase())) {
+                            let mensagem = {
+                                'de': mensagens.sender,
+                                'conteudo': mensagens.content,
+                                'horario': mensagens.time
+                            }
+                            message.mensagens.push(mensagem)
+                        }
+                    })
+                }
+            })
+        }
+    })
+    if (message.mensagens.length > 0)
+        return message
+    else
+        return MESSAGE_ERROR
+}
 
-
-
-console.log(getConversationUserContact('11987876567', '26999999963'))
 
 module.exports = {
     getAllUsers,
     getDataUser,
     getDataContactUser,
-    getAllMessagesUser
+    getAllMessagesUser,
+    getConversationUserContact,
+    getKeywordSearchFilter
 }
